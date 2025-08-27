@@ -48,77 +48,38 @@ export const generateUserSigFromServer = async (userID: string): Promise<UserSig
 };
 
 /**
- * Local UserSig generation for debugging (development only)
+ * Local UserSig generation has been removed for security reasons.
+ * All UserSig generation is now handled server-side via Supabase Edge Functions.
  */
-export const generateUserSigLocal = async (userID: string): Promise<UserSigData> => {
-  // Only use in development environment
-  if (process.env.NODE_ENV !== 'development') {
-    throw new Error('Local UserSig generation is only allowed in development');
-  }
-
-  const { genTestUserSig } = await import('../debug/GenerateTestUserSig-es.js');
-  
-  const sdkAppId = Number(process.env.REACT_APP_TENCENT_SDKAPPID);
-  const secretKey = process.env.REACT_APP_TENCENT_SECRETKEY || '';
-  
-  if (!sdkAppId || !secretKey) {
-    throw new Error('Missing Tencent Cloud configuration');
-  }
-
-  const { userSig } = genTestUserSig({
-    userID,
-    SDKAppID: sdkAppId,
-    SecretKey: secretKey,
-  });
-
-  return {
-    userID,
-    sdkAppID: sdkAppId,
-    userSig,
-    expireTime: Math.floor(Date.now() / 1000) + 604800,
-  };
-};
 
 /**
- * Intelligent UserSig generation method selection
- * Production environment uses server-side generation, development environment can choose local generation
+ * Production-ready UserSig generation
+ * All UserSig generation is now handled securely server-side via Supabase Edge Functions
  */
-export const generateUserSig = async (userID: string, forceLocal = false): Promise<UserSigData> => {
-  // Production-grade implementation: prioritize server-side generation
-  if (!forceLocal) {
-    console.log('🔒 Using secure server-side UserSig generation (production-ready)');
+export const generateUserSig = async (userID: string): Promise<UserSigData> => {
+  console.log('🔒 Using secure server-side UserSig generation (production-ready)');
+  
+  try {
+    return await generateUserSigFromServer(userID);
+  } catch (error) {
+    console.error('❌ Server-side UserSig generation failed:', error);
     
-    try {
-      return await generateUserSigFromServer(userID);
-    } catch (error) {
-      console.error('❌ Server-side UserSig generation failed:', error);
-      
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      
-      // Detailed server-side error analysis
-      let helpfulMessage = `Server-side UserSig generation failed: ${errorMessage}`;
-      
-      if (errorMessage.includes('Function not found')) {
-        helpfulMessage += '\n\n🔧 Solutions:\n1. Confirm Edge Function "generate-usersig" is deployed\n2. Check function name is correct\n3. Verify Supabase project configuration';
-      } else if (errorMessage.includes('not authenticated')) {
-        helpfulMessage += '\n\n🔧 Solutions:\n1. Check Supabase user authentication\n2. Confirm session is valid\n3. Try logging in again';
-      } else if (errorMessage.includes('Missing Tencent Cloud configuration')) {
-        helpfulMessage += '\n\n🔧 Solutions:\n1. Set environment variables in Supabase Dashboard\n2. TENCENT_SDKAPPID=20026685\n3. TENCENT_SECRETKEY=your-secret-key\n4. Redeploy function';
-      } else if (errorMessage.includes('UserID mismatch')) {
-        helpfulMessage += '\n\n🔧 Possible causes:\n1. UserID conversion issue\n2. Please check input UserID format\n3. Confirm user authentication status';
-      }
-      
-      console.log('📋 Server-side error details:', helpfulMessage);
-      throw new Error(helpfulMessage);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    
+    // Detailed server-side error analysis
+    let helpfulMessage = `Server-side UserSig generation failed: ${errorMessage}`;
+    
+    if (errorMessage.includes('Function not found')) {
+      helpfulMessage += '\n\n🔧 Solutions:\n1. Confirm Edge Function "generate-usersig" is deployed\n2. Check function name is correct\n3. Verify Supabase project configuration';
+    } else if (errorMessage.includes('not authenticated')) {
+      helpfulMessage += '\n\n🔧 Solutions:\n1. Check Supabase user authentication\n2. Confirm session is valid\n3. Try logging in again';
+    } else if (errorMessage.includes('Missing Tencent Cloud configuration')) {
+      helpfulMessage += '\n\n🔧 Solutions:\n1. Set environment variables in Supabase Dashboard\n2. TENCENT_SDKAPPID=20026685\n3. TENCENT_SECRETKEY=your-secret-key\n4. Redeploy function';
+    } else if (errorMessage.includes('UserID mismatch')) {
+      helpfulMessage += '\n\n🔧 Possible causes:\n1. UserID conversion issue\n2. Please check input UserID format\n3. Confirm user authentication status';
     }
+    
+    console.log('📋 Server-side error details:', helpfulMessage);
+    throw new Error(helpfulMessage);
   }
-
-  // Development environment fallback (only when explicitly requesting local generation)
-  if (process.env.NODE_ENV === 'development' && forceLocal && process.env.REACT_APP_TENCENT_SECRETKEY) {
-    console.log('🔧 Using local UserSig generation (development fallback only)');
-    return generateUserSigLocal(userID);
-  }
-
-  // If no local configuration and forced local
-  throw new Error('Local UserSig generation not available. Please use server-side generation or add REACT_APP_TENCENT_SECRETKEY for development.');
 };

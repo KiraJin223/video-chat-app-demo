@@ -64,7 +64,7 @@ const VideoChat: React.FC = () => {
 
       // Use production-grade server-side UserSig generation
       console.log('🔒 Using production server-side UserSig generation');
-      const sigResult = await generateUserSig(tuiCallUserId, false); // false = server-side generation
+      const sigResult = await generateUserSig(tuiCallUserId); // server-side generation only
 
       if (!sigResult) {
         throw new Error('Failed to generate UserSig');
