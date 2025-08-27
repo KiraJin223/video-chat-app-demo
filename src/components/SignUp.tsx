@@ -36,10 +36,10 @@ const SignUp: React.FC = () => {
 
       if (data) {
         toast({
-          title: 'Account created.',
-          description: 'Please check your email for verification.',
+          title: '✅ Account Created Successfully!',
+          description: 'Please check your email inbox for a verification link. You must verify your email before signing in.',
           status: 'success',
-          duration: 5000,
+          duration: 8000,
           isClosable: true,
         });
         navigate('/signin');
@@ -121,6 +121,20 @@ const SignUp: React.FC = () => {
             </Button>
           </VStack>
         </form>
+
+        {/* Email Verification Notice */}
+        <Box 
+          bg="orange.50" 
+          p={3} 
+          borderRadius="md" 
+          border="1px solid" 
+          borderColor="orange.200"
+          textAlign="center"
+        >
+          <Text fontSize="xs" color="orange.700">
+            📧 <Text as="span" fontWeight="semibold">Important:</Text> After registration, please check your email for a verification link. You must verify your email address before you can sign in.
+          </Text>
+        </Box>
         
         <Text textAlign="center" color="gray.600" fontSize="sm">
           Already have an account?{' '}
@@ -134,6 +148,30 @@ const SignUp: React.FC = () => {
             Sign In
           </ChakraLink>
         </Text>
+
+        {/* Footer Links */}
+        <Box textAlign="center" pt={4} borderTop="1px solid" borderColor="gray.200">
+          <Text fontSize="xs" color="gray.500" mb={2}>
+            Powered by{' '}
+            <ChakraLink 
+              href="https://trtc.io/" 
+              color="blue.500"
+              isExternal
+              _hover={{ textDecoration: "underline" }}
+            >
+              Tencent RTC
+            </ChakraLink>
+            {' '} | {' '}
+            <ChakraLink 
+              href="https://github.com/KiraJin223/video-chat-app-demo" 
+              color="blue.500"
+              isExternal
+              _hover={{ textDecoration: "underline" }}
+            >
+              View Source
+            </ChakraLink>
+          </Text>
+        </Box>
       </VStack>
     </Box>
   );

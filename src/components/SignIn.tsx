@@ -257,8 +257,9 @@ const SignIn: React.FC = () => {
             </ChakraLink>
             <Text>|</Text>
             <ChakraLink 
-              href="https://github.com" 
+              href="https://github.com/KiraJin223/video-chat-app-demo" 
               color="blue.500"
+              isExternal
               _hover={{ textDecoration: "underline" }}
             >
               View Source

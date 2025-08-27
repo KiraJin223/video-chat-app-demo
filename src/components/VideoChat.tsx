@@ -12,6 +12,7 @@ import {
   Container,
   IconButton,
   Tooltip,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 import { TUICallKit, TUICallKitServer, CallMediaType } from '@tencentcloud/call-uikit-react';
 import { getSupabase } from '../utils/supabase';
@@ -461,6 +462,65 @@ const VideoChat: React.FC = () => {
                 <Text>2. Register/login with a different email</Text>
                 <Text>3. Copy the other user's <Text as="span" fontWeight="bold" color="red.600">"Call User ID"</Text></Text>
                 <Text>4. Paste it above and click "Start Video Call"</Text>
+              </VStack>
+            </Box>
+
+            {/* Project Information */}
+            <Box 
+              bg="blue.50" 
+              p={4} 
+              borderRadius="lg" 
+              border="1px solid"
+              borderColor="blue.200"
+            >
+              <Text fontWeight="semibold" color="blue.800" mb={3}>
+                🚀 About This Project:
+              </Text>
+              <VStack spacing={2} align="start" fontSize="sm" color="blue.700">
+                <Text>
+                  This is an open-source video chat application built with React and powered by{' '}
+                  <ChakraLink 
+                    href="https://trtc.io/" 
+                    color="blue.600" 
+                    fontWeight="semibold"
+                    isExternal
+                    _hover={{ textDecoration: "underline" }}
+                  >
+                    Tencent RTC
+                  </ChakraLink>
+                  .
+                </Text>
+                <Text>
+                  ✨ Features high-quality 1v1 video calls with ultra-low latency
+                </Text>
+                <Text>
+                  🔐 Secure authentication powered by Supabase
+                </Text>
+                <Text>
+                  📱 Modern responsive UI built with Chakra UI and TypeScript
+                </Text>
+                <HStack spacing={1} mt={2}>
+                  <Text>🔗 Links:</Text>
+                  <ChakraLink 
+                    href="https://github.com/KiraJin223/video-chat-app-demo" 
+                    color="blue.600"
+                    fontWeight="semibold"
+                    isExternal
+                    _hover={{ textDecoration: "underline" }}
+                  >
+                    GitHub
+                  </ChakraLink>
+                  <Text>•</Text>
+                  <ChakraLink 
+                    href="https://trtc.io/" 
+                    color="blue.600"
+                    fontWeight="semibold"
+                    isExternal
+                    _hover={{ textDecoration: "underline" }}
+                  >
+                    Tencent RTC
+                  </ChakraLink>
+                </HStack>
               </VStack>
             </Box>
 
