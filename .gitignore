@@ -21,4 +21,32 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# deployment
 .vercel
+
+# development artifacts
+/src/debug
+*.backup
+
+# temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# IDE files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+*.log
+
+# documentation artifacts
+*_POST.md
+*_GUIDE.md
+OPTIMIZATION_*.md
+deploy-*.md
